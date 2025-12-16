@@ -33,6 +33,68 @@ new class extends Component
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <nav>
+    <ul class="flex space-x-4">
+        <!-- Dashboard -->
+        <li>
+            <x-nav-link 
+                :href="route('dashboard')" 
+                :active="request()->routeIs('dashboard')" 
+                wire:navigate
+            >
+                {{ __('Dashboard') }}
+            </x-nav-link>
+        </li>
+
+        <!-- Public Links -->
+        <li>
+            <x-nav-link 
+                :href="route('home')" 
+                :active="request()->routeIs('home')" 
+                wire:navigate
+            >
+                {{ __('Home') }}
+            </x-nav-link>
+        </li>
+        <li>
+            <x-nav-link 
+                :href="route('animals.list')" 
+                :active="request()->routeIs('animals.list')" 
+                wire:navigate
+            >
+                {{ __('Animals') }}
+            </x-nav-link>
+        </li>
+
+        <!-- Admin Links -->
+        <li>
+            <x-nav-link 
+                :href="route('admin.animal-types.index')" 
+                :active="request()->routeIs('admin.animal-types.*')" 
+                wire:navigate
+            >
+                {{ __('Animal Types') }}
+            </x-nav-link>
+        </li>
+        <li>
+            <x-nav-link 
+                :href="route('admin.animals.index')" 
+                :active="request()->routeIs('admin.animals.*')" 
+                wire:navigate
+            >
+                {{ __('Animals (Admin)') }}
+            </x-nav-link>
+        </li>
+        <li>
+            <x-nav-link 
+                :href="route('admin.breeds.index')" 
+                :active="request()->routeIs('admin.breeds.*')" 
+                wire:navigate
+            >
+                {{ __('Breeds') }}
+            </x-nav-link>
+        </li>
+    </ul>
                 </div>
             </div>
 
