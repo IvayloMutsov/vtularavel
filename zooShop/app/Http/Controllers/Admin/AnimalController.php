@@ -108,4 +108,11 @@ class AnimalController extends Controller
 
         return redirect()->route('admin.animals.index')->with('success', 'Animal deleted successfully.');
     }
+
+    public function show(Animal $animal)
+    {
+    // Load relationships if needed
+    $animal->load(['breed', 'animalType']);
+    return view('admin.animals.show', compact('animal'));
+    }
 }
