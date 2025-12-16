@@ -48,23 +48,26 @@ class AnimalController extends Controller
 
     // Store new animal
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'breed_id' => 'required|exists:breeds,id',
-            'animal_type_id' => 'required|exists:animal_types,id',
-            'birth_date' => 'required|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'breed_id' => 'required|exists:breeds,id',
+        'animal_type_id' => 'required|exists:animal_types,id',
+        'birth_date' => 'required|date',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('animals', 'public');
-        }
-
-        Animal::create($data);
-
-        return redirect()->route('admin.animals.index')->with('success', 'Animal added successfully.');
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $filename = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('storage/animals'), $filename);
+        $data['image'] = $filename;
     }
+
+    Animal::create($data);
+
+    return redirect()->route('admin.animals.index')->with('success', 'Animal added successfully.');
+}
 
     // Show edit form
     public function edit(Animal $animal)
@@ -76,27 +79,31 @@ class AnimalController extends Controller
 
     // Update animal
     public function update(Request $request, Animal $animal)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'breed_id' => 'required|exists:breeds,id',
-            'animal_type_id' => 'required|exists:animal_types,id',
-            'birth_date' => 'required|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'breed_id' => 'required|exists:breeds,id',
+        'animal_type_id' => 'required|exists:animal_types,id',
+        'birth_date' => 'required|date',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($animal->image) {
-                Storage::disk('public')->delete($animal->image);
-            }
-            $data['image'] = $request->file('image')->store('animals', 'public');
+    if ($request->hasFile('image')) {
+        // Delete old image if exists
+        if ($animal->image && file_exists(public_path('storage/animals/' . $animal->image))) {
+            unlink(public_path('storage/animals/' . $animal->image));
         }
 
-        $animal->update($data);
-
-        return redirect()->route('admin.animals.index')->with('success', 'Animal updated successfully.');
+        $image = $request->file('image');
+        $filename = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('storage/animals'), $filename);
+        $data['image'] = $filename;
     }
+
+    $animal->update($data);
+
+    return redirect()->route('admin.animals.index')->with('success', 'Animal updated successfully.');
+}
 
     // Delete animal
     public function destroy(Animal $animal)
