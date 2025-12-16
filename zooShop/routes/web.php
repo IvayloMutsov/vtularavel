@@ -26,4 +26,8 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+Route::get('/', [PublicController::class, 'home'])->name('home');
+Route::get('/animals', [PublicController::class, 'listAnimals'])->name('animals.list');
+Route::get('/animals/{animal}', [PublicController::class, 'showAnimal'])->name('animals.show');
+
 require __DIR__.'/auth.php';
