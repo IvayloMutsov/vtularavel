@@ -1,23 +1,43 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\AnimalController;
-use App\Http\Controllers\Admin\BreedController;
-use App\Http\Controllers\Admin\AnimalTypeController;
+use App\Http\Controllers\Admin\AnimalController as AdminAnimalController;
+use App\Http\Controllers\Admin\BreedController as AdminBreedController;
+use App\Http\Controllers\Admin\AnimalTypeController as AdminAnimalTypeController;
+use App\Http\Controllers\PublicController;
 
-Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
-    // Animals CRUD
-    Route::resource('animals', AnimalController::class);
+// ----------------------------------
+// Admin Routes (CRUD)
+// ----------------------------------
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
 
-    // Breeds CRUD
-    Route::resource('breeds', BreedController::class);
+    // Animals
+    Route::resource('animals', AdminAnimalController::class);
 
-    // Animal Types CRUD
-    Route::resource('animal-types', AnimalTypeController::class);
+    // Breeds
+    Route::resource('breeds', AdminBreedController::class);
+
+    // Animal Types
+    Route::resource('animal-types', AdminAnimalTypeController::class);
+
 });
 
-Route::view('/', 'welcome');
+// ----------------------------------
+// Public Routes
+// ----------------------------------
 
+// Homepage - latest animals
+Route::get('/', [PublicController::class, 'home'])->name('home');
+
+// Animals list with filters
+Route::get('/animals', [PublicController::class, 'listAnimals'])->name('animals.list');
+
+// Single animal details
+Route::get('/animals/{animal}', [PublicController::class, 'showAnimal'])->name('animals.show');
+
+// ----------------------------------
+// Auth, Dashboard, Profile
+// ----------------------------------
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -26,8 +46,5 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::get('/', [PublicController::class, 'home'])->name('home');
-Route::get('/animals', [PublicController::class, 'listAnimals'])->name('animals.list');
-Route::get('/animals/{animal}', [PublicController::class, 'showAnimal'])->name('animals.show');
-
+// Include Breeze auth routes
 require __DIR__.'/auth.php';
