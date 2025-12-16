@@ -1,11 +1,11 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Add/Edit Breed')
+@section('title', isset($breed) ? 'Edit Breed' : 'Add Breed')
 
 @section('content')
-<h2>@yield('title')</h2>
+<h2>{{ isset($breed) ? 'Edit Breed' : 'Add Breed' }}</h2>
 
-<form action="{{ isset($breed) ? route('admin.breeds.update', $breed) : route('admin.breeds.store') }}" method="POST">
+<form action="{{ isset($breed) ? route('admin.breeds.update', $breed->id) : route('admin.breeds.store') }}" method="POST">
     @csrf
     @if(isset($breed))
         @method('PUT')
@@ -13,7 +13,7 @@
 
     <div class="mb-3">
         <label>Name</label>
-        <input type="text" name="name" class="form-control" value="{{ $breed->name ?? '' }}" required>
+        <input type="text" name="name" class="form-control" value="{{ $breed->name ?? old('name') }}" required>
     </div>
 
     <div class="mb-3">
@@ -21,7 +21,10 @@
         <select name="animal_type_id" class="form-control" required>
             <option value="">Select Type</option>
             @foreach($types as $type)
-                <option value="{{ $type->id }}" @if(isset($breed) && $breed->animal_type_id==$type->id) selected @endif>{{ $type->name }}</option>
+                <option value="{{ $type->id }}" 
+                    @if(isset($breed) && $breed->animal_type_id == $type->id) selected @endif>
+                    {{ $type->name }}
+                </option>
             @endforeach
         </select>
     </div>
