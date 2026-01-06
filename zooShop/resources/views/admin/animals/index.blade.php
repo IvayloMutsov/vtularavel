@@ -57,7 +57,7 @@
             <td>{{ \Carbon\Carbon::parse($animal->birth_date)->format('d M, Y') }}</td>
             <td>
                 @if($animal->image)
-                    <img src="{{ asset('storage/animals' . $animal->image) }}" width="50">
+                    <img src="{{ asset('storage/animals/' . $animal->image) }}" width="50">
                 @endif
             </td>
             <td>
