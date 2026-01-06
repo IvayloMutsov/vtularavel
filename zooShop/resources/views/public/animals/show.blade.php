@@ -5,7 +5,7 @@
 @section('content')
 <div class="card mb-4">
     @if($animal->image)
-        <img src="{{ asset('storage/anmals/' . $animal->image) }}" class="card-img-top" style="height:300px; object-fit:cover;">
+        <img src="{{ asset('storage/animals/' . $animal->image) }}" class="card-img-top" style="height:300px; object-fit:cover;">
     @endif
     <div class="card-body">
         <h2>{{ $animal->name }}</h2>
