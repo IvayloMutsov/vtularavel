@@ -23,3 +23,8 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<Directory "/workspaces/vtularavel/zooShop/storage">
+    Options +FollowSymLinks
+    AllowOverride All
+</Directory>
